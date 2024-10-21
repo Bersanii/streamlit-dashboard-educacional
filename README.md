@@ -20,3 +20,9 @@ Dentro do Mysql Workbench execute a query ```SELECT @@global.secure_file_priv;``
 ### Criação do schema e Importação dos dados
 
 Dentro do Mysql Workbench abra o script ```/scripts/script-main.sql```, altere o caminho de imporatação dos dados para conter o diretório encontrado no passo anterior e execute o script.
+
+## Executando
+
+Instalar os pacotes ```pip install streamlit mysql.connector.python plotly.express matplotib```
+
+Para executar o projeto ```streamlit run app.py```
