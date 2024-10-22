@@ -1,23 +1,35 @@
 import streamlit as st 
-import database.connection
-import pandas as pd
 
-st.header("Dashboard Censo Escolar Rio Claro 2017")
+if "logged_in" not in st.session_state:
+  st.session_state.logged_in = True
 
-st.markdown("""
-     Primeira **linha** *aqui()       
-            
-            """)
+def login():
+  if st.button("Log in"):
+    st.session_state.logged_in = True
+    st.rerun()
 
-conn = database.connection.get_connection()
+def logout():
+  if st.button("Log out"):
+    st.session_state.logged_in = False
+    st.rerun()
 
-cursor = conn.cursor()
-cursor.execute("select * from v_escola;")
-res = cursor.fetchall()
+login_page = st.Page(login, title="Log in", icon=":material/login:")
+logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
 
-df = pd.DataFrame(res,columns = cursor.column_names)
+if st.session_state.logged_in:
+  pg = st.navigation(
+    {
+      "Conta": [logout_page],
+      "Relatorios": [
+        st.Page("relatorios/dashboard.py", title="Dashboard", icon=":material/dashboard:", default=True),
+        st.Page("relatorios/usuarios.py", title="Usuarios", icon=":material/dashboard:")
+      ],
+      "Formulários": [
+        st.Page("forms/cadastro_usuario.py", title="Cadastro usuário", icon=":material/dashboard:")
+      ]
+    }
+  )
+else:
+  pg = st.navigation([login_page])
 
-st.write(df)
-
-# st.sidebar.header("Meu sidebar")
-# st.sidebar.radio("Meu radio", df['NO_ENTIDADE'].unique())
+pg.run()
