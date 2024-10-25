@@ -26,6 +26,9 @@ if st.session_state.logged_in:
       ],
       "Formulários": [
         st.Page("forms/cadastro_usuario.py", title="Cadastro usuário", icon=":material/dashboard:")
+      ],
+      "Dados_escolas":[
+        st.Page("dados_escolas/consultas.py", title="Consulta",icon=None)
       ]
     }
   )
