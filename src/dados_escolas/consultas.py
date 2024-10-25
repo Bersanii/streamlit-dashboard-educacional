@@ -5,15 +5,15 @@ import database.connection
 
 
 def executar_consulta(query):
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="849702",
-        port=3306,
-        db="labbd",
-        auth_plugin="mysql_native_password",
-    )
-    # conn = database.connection.get_connection()
+    # conn = mysql.connector.connect(
+    #     host="localhost",
+    #     user="root",
+    #     password="849702",
+    #     port=3306,
+    #     db="labbd",
+    #     auth_plugin="mysql_native_password",
+    # )
+    conn = database.connection.get_connection()
     df = pd.read_sql(query, conn)
     conn.close()
     return df
