@@ -16,7 +16,7 @@ def validar(nome, email, senha):
   return True
 
 def cadastra_usuario(nome, email, senha):
-  conn = mysql.connector.connect(host = st.secrets['db_host'], user = st.secrets['db_user'], password = st.secrets['db_pass'], port = st.secrets['db_port'], db = 'labbd', auth_plugin = 'mysql_native_password')
+  conn = database.connection.get_connection()
   cursor = conn.cursor()
   query = f"INSERT INTO usuario (NOME, EMAIL, SENHA) VALUES ('{nome}', '{email}', '{senha}')"
   st.write(query)
