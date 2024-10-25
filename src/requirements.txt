@@ -1,4 +1,4 @@
 streamlit 
-mysql.connector.python
-plotly.express 
+mysql-connector-python
+plotly-express
 matplotib
