@@ -517,16 +517,14 @@ create table bookmark (
     ID_USUARIO int not null,
     ID_ESCOLA int not null,
     
-    primary key(ID),
-    foreign key FK_BOOKMARK_USUARIO (ID_USUARIO) references usuario(ID),
-    foreign key FK_BOOKMARK_ESCOLA (ID_ESCOLA) references escola(CO_ENTIDADE)
+    primary key(ID)
 );
 
 -- Imports
 
 SET sql_mode = "";
--- load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Docentes Rio Claro 2017.csv'
-load data infile '/var/lib/mysql-files/Docentes Rio Claro 2017.csv'
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Docentes Rio Claro 2017.csv'
+-- load data infile '/var/lib/mysql-files/Docentes Rio Claro 2017.csv'
 into table labbd.docente
 fields terminated by '|'
 enclosed by '"'
@@ -535,8 +533,8 @@ ignore 1 lines
 ;
 
 SET sql_mode = "";
--- load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Matriculas Rio Claro 2017.csv'
-load data infile '/var/lib/mysql-files/Matriculas Rio Claro 2017.csv'
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Matriculas Rio Claro 2017.csv'
+-- load data infile '/var/lib/mysql-files/Matriculas Rio Claro 2017.csv'
 into table labbd.matricula
 fields terminated by '|'
 enclosed by '"'
@@ -544,8 +542,8 @@ lines terminated by '\r\n'
 ignore 1 lines
 ;
 
--- load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Turmas Rio Claro 2017.csv'
-load data infile '/var/lib/mysql-files/Turmas Rio Claro 2017.csv'
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Turmas Rio Claro 2017.csv'
+-- load data infile '/var/lib/mysql-files/Turmas Rio Claro 2017.csv'
 into table labbd.turma
 fields terminated by '|'
 enclosed by '"'
@@ -553,8 +551,8 @@ lines terminated by '\r\n'
 ignore 1 lines
 ;
 
--- load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Escolas Rio Claro 2017.csv'
-load data infile '/var/lib/mysql-files/Escolas Rio Claro 2017.csv'
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Escolas Rio Claro 2017.csv'
+-- load data infile '/var/lib/mysql-files/Escolas Rio Claro 2017.csv'
 into table labbd.escola
 fields terminated by '|'
 enclosed by '"'
@@ -622,14 +620,45 @@ alter table turma add constraint FK_TURMA_ESCOLA foreign key (CO_ENTIDADE) refer
 alter table matricula add constraint FK_MATRICULA_TURMA foreign key (ID_TURMA) references turma(ID_TURMA);
 alter table docente add constraint FK_DOCENTE_TURMA foreign key (ID_TURMA) references turma(ID_TURMA);
 
+alter table bookmark add constraint FK_BOOKMARK_USUARIO foreign key (ID_USUARIO) references usuario(ID);
+alter table bookmark add constraint FK_BOOKMARK_ESCOLA foreign key (ID_ESCOLA) references escola(CO_ENTIDADE);
+
 -- Views
 
 CREATE VIEW v_turma AS
 SELECT 
-    ID_TURMA AS codigo,
+	ID_TURMA AS codigo,
+    CO_ENTIDADE AS codigo_escola,
     NO_TURMA AS nome,
     NU_MATRICULAS AS numero_matriculas,
-    TP_ETAPA_ENSINO AS etapa_de_ensino
+    TP_ETAPA_ENSINO AS etapa_de_ensino,
+    CASE WHEN IN_DISC_QUIMICA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_quimica,
+	CASE WHEN IN_DISC_FISICA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_fisica,
+	CASE WHEN IN_DISC_MATEMATICA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_matematica,
+	CASE WHEN IN_DISC_BIOLOGIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_biologia,
+	CASE WHEN IN_DISC_CIENCIAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_ciencias,
+	CASE WHEN IN_DISC_LINGUA_PORTUGUESA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_portuguesa,
+	CASE WHEN IN_DISC_LINGUA_INGLES = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_ingles,
+	CASE WHEN IN_DISC_LINGUA_ESPANHOL = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_espanhol,
+	CASE WHEN IN_DISC_LINGUA_FRANCES = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_frances,
+	CASE WHEN IN_DISC_LINGUA_OUTRA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_outra,
+	CASE WHEN IN_DISC_LINGUA_INDIGENA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_lingua_indigena,
+	CASE WHEN IN_DISC_ARTES = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_artes,
+	CASE WHEN IN_DISC_EDUCACAO_FISICA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_educacao_fisica,
+	CASE WHEN IN_DISC_HISTORIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_historia,
+	CASE WHEN IN_DISC_GEOGRAFIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_geografia,
+	CASE WHEN IN_DISC_FILOSOFIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_filosofia,
+	CASE WHEN IN_DISC_ENSINO_RELIGIOSO = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_ensino_religioso,
+	CASE WHEN IN_DISC_ESTUDOS_SOCIAIS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_estudos_sociais,
+	CASE WHEN IN_DISC_SOCIOLOGIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_sociologia,
+	CASE WHEN IN_DISC_EST_SOCIAIS_SOCIOLOGIA = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_est_sociais_sociologia,
+	CASE WHEN IN_DISC_INFORMATICA_COMPUTACAO = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_informatica_computacao,
+	CASE WHEN IN_DISC_PROFISSIONALIZANTE = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_profissionalizante,
+	CASE WHEN IN_DISC_ATENDIMENTO_ESPECIAIS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_atendimento_especiais,
+	CASE WHEN IN_DISC_DIVER_SOCIO_CULTURAL = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_diver_socio_cultural,
+	CASE WHEN IN_DISC_LIBRAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_libras, 
+	CASE WHEN IN_DISC_PEDAGOGICAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_pedagogicas,
+	CASE WHEN IN_DISC_OUTRAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_outras
 FROM 
     turma;
     
@@ -637,6 +666,7 @@ CREATE VIEW v_matricula AS
 SELECT 
     ID_MATRICULA AS codigo,
     CO_PESSOA_FISICA AS codigo_aluno,
+    CO_ENTIDADE AS codigo_escola,
     TP_ETAPA_ENSINO AS etapa_de_ensino
 FROM 
     matricula;
@@ -658,6 +688,7 @@ FROM
 CREATE VIEW v_docente AS
 SELECT 
     CO_PESSOA_FISICA AS codigo,
+    CO_ENTIDADE AS codigo_escola,
     CASE 
         WHEN TP_TIPO_DOCENTE = 1 THEN 'Docente'
         WHEN TP_TIPO_DOCENTE = 2 THEN 'Auxiliar/Assistente Educacional'
