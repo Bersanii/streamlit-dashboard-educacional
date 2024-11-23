@@ -7,7 +7,7 @@ cursor = conn.cursor()
 
 st.header("Usuários")
 
-cursor.execute("select * from usuario;")
+cursor.execute("select * from v_usuario;")
 res = cursor.fetchall()
 
 df = pd.DataFrame(res,columns = cursor.column_names)

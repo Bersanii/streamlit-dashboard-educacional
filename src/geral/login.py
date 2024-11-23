@@ -9,7 +9,7 @@ password = st.text_input("Senha", type="password")
 
 if st.button("Login"):
   # Validação de credenciais
-  query = f"SELECT * FROM usuario WHERE NOME = '{username}' AND SENHA = '{password}'"
+  query = f"SELECT * FROM usuario WHERE NOME = '{username}' AND SENHA = sha('{password}')"
   result = database.connection.run_query(query, True)
 
   if result.size > 0:

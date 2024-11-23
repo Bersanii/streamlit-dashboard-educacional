@@ -506,7 +506,8 @@ create table usuario (
     EMAIL varchar(255),
     DATA_CADASTRO datetime DEFAULT CURRENT_TIMESTAMP,
     IDADE smallint,
-    SENHA varchar(40),-- default (sha('senha')),
+    SENHA varchar(40) default (sha('root')),
+    ADMINISTRADOR tinyint(1) not null default 0,
     
     primary key(ID),
     unique(EMAIL)
@@ -515,7 +516,7 @@ create table usuario (
 create table bookmark (
 	ID int auto_increment,
     ID_USUARIO int not null,
-    ID_ESCOLA int not null,
+    CODIGO_ESCOLA int not null,
     
     primary key(ID)
 );
@@ -606,6 +607,8 @@ INSERT INTO etapas_ensino (id_etapa, nome_etapa) VALUES
 (73, 'Curso FIC integrado na modalidade EJA - Nível Fundamental (EJA integrada à Educação Profissional de Nível Fundamental)'),
 (74, 'Curso Técnico Integrado na Modalidade EJA (EJA integrada à Educação Profissional de Nível Médio)');
 
+INSERT INTO usuario (NOME, ADMINISTRADOR) VALUES ("root", true);
+
 -- Constraints
 
 alter table escola add constraint primary key (CO_ENTIDADE);
@@ -621,10 +624,46 @@ alter table matricula add constraint FK_MATRICULA_TURMA foreign key (ID_TURMA) r
 alter table docente add constraint FK_DOCENTE_TURMA foreign key (ID_TURMA) references turma(ID_TURMA);
 
 alter table bookmark add constraint FK_BOOKMARK_USUARIO foreign key (ID_USUARIO) references usuario(ID);
-alter table bookmark add constraint FK_BOOKMARK_ESCOLA foreign key (ID_ESCOLA) references escola(CO_ENTIDADE);
+alter table bookmark add constraint FK_BOOKMARK_ESCOLA foreign key (CODIGO_ESCOLA) references escola(CO_ENTIDADE);
+
+-- Triggers
+
+DELIMITER $$
+CREATE TRIGGER before_insert_bookmark
+BEFORE INSERT ON bookmark
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM bookmark
+        WHERE ID_USUARIO = NEW.ID_USUARIO AND CODIGO_ESCOLA = NEW.CODIGO_ESCOLA
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bookmark já existe para este usuário e código de escola.';
+    END IF;
+END$$
+DELIMITER ;
 
 -- Views
 
+CREATE VIEW v_usuario AS
+SELECT 
+	ID AS id,
+    NOME AS nome,
+    DATA_NASCIMENTO AS data_nascimento,
+    EMAIL AS email,
+    IDADE AS idade,
+    CASE WHEN ADMINISTRADOR = TRUE THEN 'Sim' ELSE 'Não' END AS administrador
+FROM  usuario;
+    
+CREATE VIEW v_bookmarks_usuario AS
+SELECT 
+	bookmark.ID AS id,
+    bookmark.ID_USUARIO AS id_usuario,
+    escola.NO_ENTIDADE AS nome_escola
+FROM bookmark
+INNER JOIN escola ON bookmark.CODIGO_ESCOLA = escola.CO_ENTIDADE;
+    
 CREATE VIEW v_turma AS
 SELECT 
 	ID_TURMA AS codigo,
@@ -659,8 +698,7 @@ SELECT
 	CASE WHEN IN_DISC_LIBRAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_libras, 
 	CASE WHEN IN_DISC_PEDAGOGICAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_pedagogicas,
 	CASE WHEN IN_DISC_OUTRAS = 1 THEN 'Sim' ELSE 'Não' END AS disciplina_outras
-FROM 
-    turma;
+FROM turma;
     
 CREATE VIEW v_matricula AS
 SELECT 
@@ -668,8 +706,7 @@ SELECT
     CO_PESSOA_FISICA AS codigo_aluno,
     CO_ENTIDADE AS codigo_escola,
     TP_ETAPA_ENSINO AS etapa_de_ensino
-FROM 
-    matricula;
+FROM matricula;
     
 CREATE VIEW v_escola AS
 SELECT 
@@ -682,8 +719,7 @@ SELECT
         WHEN TP_SITUACAO_FUNCIONAMENTO = 4 THEN 'Extinta em Anos Anteriores'
         ELSE 'Situação Desconhecida'
     END AS situacao
-FROM 
-    escola;
+FROM escola;
     
 CREATE VIEW v_docente AS
 SELECT 
@@ -705,5 +741,4 @@ SELECT
         WHEN TP_TIPO_CONTRATACAO = 4 THEN 'Contrato CLT'
         ELSE 'Tipo de Contrato Desconhecido'
     END AS contrato
-FROM 
-    docente;
+FROM docente;

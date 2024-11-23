@@ -38,4 +38,4 @@ if escola_selecionada:
   """
 
   df = database.connection.run_query(query, True)
-  st.dataframe(df)
+  st.dataframe(df, use_container_width=True)

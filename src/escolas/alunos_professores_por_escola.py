@@ -23,4 +23,4 @@ query = f"""
   FROM v_escola e;
 """
 df = database.connection.run_query(query, True)
-st.dataframe(df)
+st.dataframe(df, use_container_width=True)

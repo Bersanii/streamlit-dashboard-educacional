@@ -21,4 +21,4 @@ if escola_selecionada:
   """
 
   turmas_df = database.connection.run_query(query, True)
-  st.dataframe(turmas_df)
+  st.dataframe(turmas_df, use_container_width=True)

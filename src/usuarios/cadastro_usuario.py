@@ -1,7 +1,6 @@
 import streamlit as st 
 import database.connection
 import pandas as pd
-import mysql.connector
 
 with st.form("cadastro_usuario"):
   st.title("Cadastro de usuário")
