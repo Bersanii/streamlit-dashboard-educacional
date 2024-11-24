@@ -9,12 +9,12 @@ if 'usuario' not in st.session_state:
 ##########################################################################
 # DEVMODE logar automaticamente no root, deixar descomentado somente enquanto estiver testando
 ##########################################################################
-# import database.connection
-# query = f"SELECT * FROM usuario WHERE NOME = 'root' AND SENHA = sha('root')"
-# result = database.connection.run_query(query, True)
-# st.session_state["logged_in"] = True
-# usuario = result.iloc[0]
-# st.session_state["usuario"] = usuario
+import database.connection
+query = f"SELECT * FROM usuario WHERE NOME = 'root' AND SENHA = sha('root')"
+result = database.connection.run_query(query, True)
+st.session_state["logged_in"] = True
+usuario = result.iloc[0]
+st.session_state["usuario"] = usuario
 ##########################################################################
 
 if not st.session_state.logged_in: # Não está logado

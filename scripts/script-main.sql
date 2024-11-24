@@ -521,11 +521,16 @@ create table bookmark (
     primary key(ID)
 );
 
+create table escola_geo (
+	CODIGO_ESCOLA int,
+    LAT decimal(10, 7),
+    LON decimal(10, 7)
+);
+
 -- Imports
 
 SET sql_mode = "";
 load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Docentes Rio Claro 2017.csv'
--- load data infile '/var/lib/mysql-files/Docentes Rio Claro 2017.csv'
 into table labbd.docente
 fields terminated by '|'
 enclosed by '"'
@@ -535,7 +540,6 @@ ignore 1 lines
 
 SET sql_mode = "";
 load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Matriculas Rio Claro 2017.csv'
--- load data infile '/var/lib/mysql-files/Matriculas Rio Claro 2017.csv'
 into table labbd.matricula
 fields terminated by '|'
 enclosed by '"'
@@ -544,7 +548,6 @@ ignore 1 lines
 ;
 
 load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Turmas Rio Claro 2017.csv'
--- load data infile '/var/lib/mysql-files/Turmas Rio Claro 2017.csv'
 into table labbd.turma
 fields terminated by '|'
 enclosed by '"'
@@ -553,8 +556,15 @@ ignore 1 lines
 ;
 
 load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Escolas Rio Claro 2017.csv'
--- load data infile '/var/lib/mysql-files/Escolas Rio Claro 2017.csv'
 into table labbd.escola
+fields terminated by '|'
+enclosed by '"'
+lines terminated by '\r\n'
+ignore 1 lines
+;
+
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Escolas Geolocalizacao.csv'
+into table labbd.escola_geo
 fields terminated by '|'
 enclosed by '"'
 lines terminated by '\r\n'
