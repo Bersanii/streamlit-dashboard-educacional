@@ -766,3 +766,35 @@ SELECT
         ELSE 'Tipo de Contrato Desconhecido'
     END AS contrato
 FROM docente;
+
+-- Procedures 
+
+DELIMITER $$
+CREATE PROCEDURE sp_distribuicao_escolas_por_situacao()
+BEGIN
+    SELECT situacao, COUNT(*) AS quantidade
+    FROM v_escola
+    GROUP BY situacao;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_turmas_por_etapa_ensino()
+BEGIN
+    SELECT etapas_ensino.nome_etapa, COUNT(*) AS quantidade
+    FROM v_turma
+    INNER JOIN etapas_ensino ON v_turma.etapa_de_ensino = etapas_ensino.id_etapa
+    GROUP BY etapas_ensino.id_etapa
+    ORDER BY etapas_ensino.id_etapa;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_matriculas_por_escola()
+BEGIN
+    SELECT nome AS escola, COUNT(*) AS quantidade
+    FROM v_matricula
+    INNER JOIN v_escola ON v_matricula.codigo_escola = v_escola.codigo
+    GROUP BY nome;
+END$$
+DELIMITER ;

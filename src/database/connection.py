@@ -28,3 +28,8 @@ def run_query(query: str, return_df = False):
   finally:
     cursor.close()
     conn.close()
+
+def run_procedure(name: str):
+  query = f"CALL {name}()"
+  df = run_query(query, True)  # Retorna os resultados como DataFrame
+  return df
