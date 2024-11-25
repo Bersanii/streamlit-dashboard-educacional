@@ -562,7 +562,6 @@ enclosed by '"'
 lines terminated by '\r\n'
 ignore 1 lines
 ;
-
 load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.1\\Uploads\\Escolas Geolocalizacao.csv'
 into table labbd.escola_geo
 fields terminated by '|'
@@ -570,6 +569,7 @@ enclosed by '"'
 lines terminated by '\r\n'
 ignore 1 lines
 ;
+
 
 INSERT INTO etapas_ensino (id_etapa, nome_etapa) VALUES
 (1, 'Educação Infantil - Creche'),
@@ -650,6 +650,18 @@ BEGIN
     ) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Bookmark já existe para este usuário e código de escola.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER before_delete_usuario
+BEFORE DELETE ON usuario
+FOR EACH ROW
+BEGIN
+    IF OLD.nome = 'root' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Não é permitido remover o usuário root.';
     END IF;
 END$$
 DELIMITER ;

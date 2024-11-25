@@ -32,7 +32,8 @@ elif st.session_state.logged_in and st.session_state.usuario['ADMINISTRADOR']: #
       ],
       "Usuários": [
         st.Page("usuarios/usuarios.py", title="Usuarios", icon=":material/group:"),
-        st.Page("usuarios/cadastro_usuario.py", title="Cadastro usuário", icon=":material/person_add:")
+        st.Page("usuarios/cadastro_usuario.py", title="Cadastro usuário", icon=":material/person_add:"),
+        st.Page("usuarios/alteracao_usuario.py", title="Alteração usuário", icon=":material/person_edit:")
       ],
       "Escolas":[
         st.Page("escolas/alunos_professores_por_escola.py", title="Alunos e Professores", icon=":material/dashboard:"),

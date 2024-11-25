@@ -1,14 +1,31 @@
 import streamlit as st 
 import database.connection
-import pandas as pd
+import mysql.connector
+from mysql.connector import errorcode
 
-conn = database.connection.get_connection()
-cursor = conn.cursor()
+st.title(f'Listagem de usuários')
 
-st.header("Usuários")
+query = f'''
+  SELECT * FROM v_usuario
+'''
 
-cursor.execute("select * from v_usuario;")
-res = cursor.fetchall()
+df = database.connection.run_query(query, True)
 
-df = pd.DataFrame(res,columns = cursor.column_names)
-st.write(df)
+st.dataframe(df, use_container_width=True)
+st.divider()
+st.header('Remover usuário')
+bookmark_id = st.selectbox('Selecione o código do usuário que deseja remover', df['id'].tolist())
+if st.button('Remover usuário'):
+  if bookmark_id:
+    delete_query = f'DELETE FROM usuario WHERE id = {bookmark_id}'
+    try:
+      database.connection.run_query(delete_query, False)
+      st.success('Usuário removido com sucesso!')
+      st.rerun()
+    except mysql.connector.Error as err:
+    # Verifica se é um erro SQLSTATE '45000' (customizado pela trigger)
+      if err.errno == errorcode.ER_SIGNAL_EXCEPTION:  # ER_SIGNAL_EXCEPTION representa erros de SIGNAL.
+        st.error(f"Trigger: {err.msg}")
+      else:
+        # Outros erros
+        st.error(f"Erro: {err}")

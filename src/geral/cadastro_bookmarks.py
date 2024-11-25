@@ -17,8 +17,7 @@ label_to_value = {escola["label"]: escola["value"] for escola in escolas}
 
 with st.form("cadastro_bookmark"):
   st.title("Cadastro de Bookmark")
-  st.text("Selecione a escola que deseja adicionar aos seus bookmarks")
-  nome = st.selectbox("Selecione a escola:", labels)
+  nome = st.selectbox("Selecione a escola que deseja adicionar aos seus bookmarks", labels)
   submit = st.form_submit_button("Salvar")
 
 def validar(nome):
