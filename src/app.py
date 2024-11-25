@@ -26,6 +26,7 @@ elif st.session_state.logged_in and st.session_state.usuario['ADMINISTRADOR']: #
         st.Page("geral/logout.py", title="Logout", icon=":material/logout:"),
         st.Page("geral/bookmarks.py", title="Bookmarks", icon=":material/bookmark:"),
         st.Page("geral/cadastro_bookmarks.py", title="Cadastro Bookmarks", icon=":material/bookmark_add:"),
+        st.Page("geral/alteracao_bookmarks.py", title="Alteração Bookmarks", icon=":material/bookmarks:")
       ],
       "Geral": [
         st.Page("geral/dashboard.py", title="Dashboard", icon=":material/dashboard:", default=True),
@@ -51,6 +52,7 @@ else: # Logado e é usuário normal
         st.Page("geral/logout.py", title="Logout", icon=":material/logout:"),
         st.Page("geral/bookmarks.py", title="Bookmarks", icon=":material/logout:"),
         st.Page("geral/cadastro_bookmarks.py", title="Cadastro Bookmarks", icon=":material/logout:"),
+        st.Page("geral/alteracao_bookmarks.py", title="Alteração Bookmarks", icon=":material/bookmarks:")
       ],
       "Geral": [
         st.Page("geral/dashboard.py", title="Dashboard", icon=":material/dashboard:", default=True),

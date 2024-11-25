@@ -14,10 +14,15 @@ df = database.connection.run_query(query, True)
 st.dataframe(df, use_container_width=True)
 st.divider()
 st.header('Remover usuário')
-bookmark_id = st.selectbox('Selecione o código do usuário que deseja remover', df['id'].tolist())
+usuario_selecionado = st.selectbox(
+  "Selecione o usuário que deseja remover",
+  options=df.itertuples(index=False),  # Usa o DataFrame como fonte de opções
+  format_func=lambda u: u.nome  # Exibe o nome no selectbox
+)
+
 if st.button('Remover usuário'):
-  if bookmark_id:
-    delete_query = f'DELETE FROM usuario WHERE id = {bookmark_id}'
+  if usuario_selecionado:
+    delete_query = f'DELETE FROM usuario WHERE id = {usuario_selecionado.id}'
     try:
       database.connection.run_query(delete_query, False)
       st.success('Usuário removido com sucesso!')

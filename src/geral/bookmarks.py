@@ -14,10 +14,14 @@ if df.size > 0:
   st.dataframe(df, use_container_width=True)
   st.divider()
   st.header('Remover bookmark')
-  bookmark_id = st.selectbox('Selecione o código da bookmark que deseja remover', df['id'].tolist())
+  bookmark_selecionado = st.selectbox(
+    "Selecione o bookmark que deseja remover",
+    options=df.itertuples(index=False),  
+    format_func=lambda u: u.nome_escola  # Exibe o nome no selectbox
+  )
   if st.button('Remover Bookmark'):
-    if bookmark_id:
-      delete_query = f'DELETE FROM bookmark WHERE id = {bookmark_id} AND id_usuario = {st.session_state.usuario['ID']}'
+    if bookmark_selecionado:
+      delete_query = f'DELETE FROM bookmark WHERE id = {bookmark_selecionado.id} AND id_usuario = {st.session_state.usuario['ID']}'
       try:
         database.connection.run_query(delete_query, False)
         st.success('Bookmark removido com sucesso!')

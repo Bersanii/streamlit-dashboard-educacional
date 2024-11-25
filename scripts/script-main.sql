@@ -517,6 +517,7 @@ create table bookmark (
 	ID int auto_increment,
     ID_USUARIO int not null,
     CODIGO_ESCOLA int not null,
+    DESCRICAO varchar(255),
     
     primary key(ID)
 );
@@ -682,7 +683,8 @@ CREATE VIEW v_bookmarks_usuario AS
 SELECT 
 	bookmark.ID AS id,
     bookmark.ID_USUARIO AS id_usuario,
-    escola.NO_ENTIDADE AS nome_escola
+    escola.NO_ENTIDADE AS nome_escola,
+    bookmark.DESCRICAO AS descricao
 FROM bookmark
 INNER JOIN escola ON bookmark.CODIGO_ESCOLA = escola.CO_ENTIDADE;
     
