@@ -3,6 +3,7 @@ import database.connection
 import mysql.connector
 from mysql.connector import errorcode
 import time
+from datetime import date
 
 # Formulário de cadastro de usuário
 with st.form("cadastro_usuario"):
@@ -10,7 +11,7 @@ with st.form("cadastro_usuario"):
   nome = st.text_input('Nome:')
   email = st.text_input('Email:')
   senha = st.text_input('Senha:', type='password')
-  data_nascimento = st.date_input('Data de Nascimento:')
+  data_nascimento = st.date_input('Data de Nascimento:', min_value=date(1900, 1, 1), max_value=date.today())
   administrador = st.checkbox('Administrador')
   submit = st.form_submit_button("Enviar")
 
@@ -24,8 +25,8 @@ def cadastra_usuario(nome, email, senha, data_nascimento, administrador):
     # Convertendo o valor do checkbox para um inteiro (0 ou 1)
     admin_value = 1 if administrador else 0
     query = f"""
-    INSERT INTO usuario (NOME, EMAIL, SENHA, DATA_NASCIMENTO, ADMINISTRADOR) 
-    VALUES ('{nome}', '{email}', '{senha}', '{data_nascimento}', {admin_value})
+      INSERT INTO usuario (NOME, EMAIL, SENHA, DATA_NASCIMENTO, ADMINISTRADOR, IDADE) 
+      VALUES ('{nome}', '{email}', '{senha}', '{data_nascimento}', {admin_value}, calcular_idade('{data_nascimento}'))
     """
     database.connection.run_query(query)
     st.success("Cadastrado com sucesso")

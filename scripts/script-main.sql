@@ -787,14 +787,24 @@ BEGIN
     GROUP BY etapas_ensino.id_etapa
     ORDER BY etapas_ensino.id_etapa;
 END$$
-DELIMITER ;
+DELIMITER ;v_docente
 
 DELIMITER $$
-CREATE PROCEDURE sp_matriculas_por_escola()
+CREATE PROCEDURE sp_docentes_por_funcao()
 BEGIN
-    SELECT nome AS escola, COUNT(*) AS quantidade
-    FROM v_matricula
-    INNER JOIN v_escola ON v_matricula.codigo_escola = v_escola.codigo
-    GROUP BY nome;
+    SELECT funcao, COUNT(*) AS quantidade
+    FROM v_docente
+    GROUP BY funcao;
+END$$
+DELIMITER ;
+
+-- Functions
+
+DELIMITER $$
+CREATE FUNCTION calcular_idade(data_nascimento DATE) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    RETURN TIMESTAMPDIFF(YEAR, data_nascimento, CURDATE());
 END$$
 DELIMITER ;

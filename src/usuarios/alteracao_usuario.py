@@ -1,6 +1,7 @@
 import streamlit as st
 import database.connection
 import time
+from datetime import date
 
 def obter_usuarios():
   try:
@@ -27,7 +28,7 @@ def atualizar_usuario(usuario_id, nome, email, data_nascimento, administrador):
     admin_value = 1 if administrador else 0
     query = f"""
       UPDATE usuario 
-      SET NOME = '{nome}', EMAIL = '{email}', DATA_NASCIMENTO = '{data_nascimento}', ADMINISTRADOR = {admin_value} 
+      SET NOME = '{nome}', EMAIL = '{email}', DATA_NASCIMENTO = '{data_nascimento}', ADMINISTRADOR = {admin_value}, IDADE = calcular_idade('{data_nascimento}') 
       WHERE ID = {usuario_id}
     """
     database.connection.run_query(query)
@@ -58,7 +59,7 @@ if usuarios_df is not None and not usuarios_df.empty:
         st.subheader(f"Alterar Dados do Usuário: {dados_usuario['nome']}")
         nome = st.text_input("Nome", value=dados_usuario["nome"])
         email = st.text_input("Email", value=dados_usuario["email"])
-        data_nascimento = st.date_input("Data de Nascimento", value=dados_usuario["data_nascimento"])
+        data_nascimento = st.date_input("Data de Nascimento", value=dados_usuario["data_nascimento"], min_value=date(1900, 1, 1), max_value=date.today())
         administrador = st.checkbox("Administrador", value=bool(dados_usuario["administrador"] == 'Sim'))
         submit = st.form_submit_button("Salvar Alterações")
 
