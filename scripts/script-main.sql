@@ -3,7 +3,7 @@ use labbd;
 create table turma
 (
 NU_ANO_CENSO int
-, ID_TURMA int primary key
+, ID_TURMA int
 , NO_TURMA varchar(80)
 , TX_HR_INICIAL varchar(2)
 , TX_MI_INICIAL varchar(2)
@@ -89,14 +89,16 @@ NU_ANO_CENSO int
 , IN_MANT_ESCOLA_PRIVADA_S_FINS bool
 , TP_REGULAMENTACAO int
 , TP_LOCALIZACAO_DIFERENCIADA int
-, IN_EDUCACAO_INDIGENA bool
+, IN_EDUCACAO_INDIGENA bool,
+
+primary key (ID_TURMA)
 );
 
 create table matricula
 (
 NU_ANO_CENSO int
 , ID_MATRICULA bigint
-, CO_PESSOA_FISICA varchar(12) primary key
+, CO_PESSOA_FISICA varchar(12)
 , NU_DIA int
 , NU_MES int
 , NU_ANO int
@@ -185,13 +187,15 @@ NU_ANO_CENSO int
 , IN_MANT_ESCOLA_PRIVADA_S_FINS bool
 , TP_REGULAMENTACAO int
 , TP_LOCALIZACAO_DIFERENCIADA int
-, IN_EDUCACAO_INDIGENA bool
+, IN_EDUCACAO_INDIGENA bool,
+
+primary key (ID_MATRICULA)
 );
 
 create table escola
 (
 NU_ANO_CENSO int
-, CO_ENTIDADE int primary key
+, CO_ENTIDADE int
 , NO_ENTIDADE varchar(100)
 , CO_ORGAO_REGIONAL varchar(5)
 , TP_SITUACAO_FUNCIONAMENTO int
@@ -355,13 +359,15 @@ NU_ANO_CENSO int
 , IN_ESP_EXCLUSIVA_EJA_MEDIO bool
 , IN_ESP_EXCLUSIVA_EJA_PROF bool
 , IN_COMUM_PROF bool
-, IN_ESP_EXCLUSIVA_PROF bool
+, IN_ESP_EXCLUSIVA_PROF bool,
+
+primary key (CO_ENTIDADE)
 );
 
 create table docente
 (
 NU_ANO_CENSO int
-, CO_PESSOA_FISICA bigint primary key
+, CO_PESSOA_FISICA bigint
 , NU_DIA int
 , NU_MES int
 , NU_ANO int
@@ -491,12 +497,16 @@ NU_ANO_CENSO int
 , IN_MANT_ESCOLA_PRIVADA_S_FINS bool
 , TP_REGULAMENTACAO int
 , TP_LOCALIZACAO_DIFERENCIADA int
-, IN_EDUCACAO_INDIGENA bool
+, IN_EDUCACAO_INDIGENA bool,
+
+primary key (CO_PESSOA_FISICA, ID_TURMA)
 );
 
 CREATE TABLE etapas_ensino (
-    id_etapa INT PRIMARY KEY,
-    nome_etapa VARCHAR(255) NOT NULL
+    id_etapa INT,
+    nome_etapa VARCHAR(255) NOT NULL,
+    
+    primary key (id_etapa)
 );
 
 create table usuario (
@@ -523,9 +533,11 @@ create table bookmark (
 );
 
 create table escola_geo (
-	CODIGO_ESCOLA int primary key,
+	CODIGO_ESCOLA int,
     LAT decimal(10, 7),
-    LON decimal(10, 7)
+    LON decimal(10, 7),
+    
+    primary key(CODIGO_ESCOLA)
 );
 
 -- Imports
