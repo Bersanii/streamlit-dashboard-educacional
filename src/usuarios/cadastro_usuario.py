@@ -26,7 +26,7 @@ def cadastra_usuario(nome, email, senha, data_nascimento, administrador):
     admin_value = 1 if administrador else 0
     query = f"""
       INSERT INTO usuario (NOME, EMAIL, SENHA, DATA_NASCIMENTO, ADMINISTRADOR, IDADE) 
-      VALUES ('{nome}', '{email}', '{senha}', '{data_nascimento}', {admin_value}, calcular_idade('{data_nascimento}'))
+      VALUES ('{nome}', '{email}', sha('{senha}'), '{data_nascimento}', {admin_value}, calcular_idade('{data_nascimento}'))
     """
     database.connection.run_query(query)
     st.success("Cadastrado com sucesso")
