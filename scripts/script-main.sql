@@ -3,7 +3,7 @@ use labbd;
 create table turma
 (
 NU_ANO_CENSO int
-, ID_TURMA int
+, ID_TURMA int primary key
 , NO_TURMA varchar(80)
 , TX_HR_INICIAL varchar(2)
 , TX_MI_INICIAL varchar(2)
@@ -96,7 +96,7 @@ create table matricula
 (
 NU_ANO_CENSO int
 , ID_MATRICULA bigint
-, CO_PESSOA_FISICA varchar(12)
+, CO_PESSOA_FISICA varchar(12) primary key
 , NU_DIA int
 , NU_MES int
 , NU_ANO int
@@ -191,7 +191,7 @@ NU_ANO_CENSO int
 create table escola
 (
 NU_ANO_CENSO int
-, CO_ENTIDADE int
+, CO_ENTIDADE int primary key
 , NO_ENTIDADE varchar(100)
 , CO_ORGAO_REGIONAL varchar(5)
 , TP_SITUACAO_FUNCIONAMENTO int
@@ -361,7 +361,7 @@ NU_ANO_CENSO int
 create table docente
 (
 NU_ANO_CENSO int
-, CO_PESSOA_FISICA bigint
+, CO_PESSOA_FISICA bigint primary key
 , NU_DIA int
 , NU_MES int
 , NU_ANO int
@@ -523,7 +523,7 @@ create table bookmark (
 );
 
 create table escola_geo (
-	CODIGO_ESCOLA int,
+	CODIGO_ESCOLA int primary key,
     LAT decimal(10, 7),
     LON decimal(10, 7)
 );
@@ -618,14 +618,9 @@ INSERT INTO etapas_ensino (id_etapa, nome_etapa) VALUES
 (73, 'Curso FIC integrado na modalidade EJA - Nível Fundamental (EJA integrada à Educação Profissional de Nível Fundamental)'),
 (74, 'Curso Técnico Integrado na Modalidade EJA (EJA integrada à Educação Profissional de Nível Médio)');
 
-INSERT INTO usuario (NOME, ADMINISTRADOR) VALUES ("root", true);
+INSERT INTO usuario (NOME, ADMINISTRADOR) VALUES ('root', true);
 
 -- Constraints
-
-alter table escola add constraint primary key (CO_ENTIDADE);
-alter table turma add constraint primary key (ID_TURMA);
-alter table docente add constraint primary key (CO_PESSOA_FISICA, ID_TURMA);
-alter table matricula add constraint primary key (ID_MATRICULA);
  
 alter table matricula add constraint FK_MATRICULA_ESCOLA foreign key (CO_ENTIDADE) references escola(CO_ENTIDADE);
 alter table docente add constraint FK_DOCENTE_ESCOLA foreign key (CO_ENTIDADE) references escola(CO_ENTIDADE);
